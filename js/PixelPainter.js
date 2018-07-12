@@ -126,8 +126,40 @@ function grabColor() {
 
 //Adding eventlisteners to pixel blocks
 for(var i = 0; i<pixelBlocks.length; i++){
-    pixelBlocks[i].addEventListener("click", addColor);
+    pixelBlocks[i].addEventListener("mousedown", addColor);
   };
+
+for(var i = 0; i<pixelBlocks.length; i++){
+    pixelBlocks[i].addEventListener("mousedown", mouseDown);
+  };
+
+for(var i = 0; i<pixelBlocks.length; i++){
+    pixelBlocks[i].addEventListener("mouseup", mouseUp);
+  };
+
+for(var i = 0; i<pixelBlocks.length; i++){
+    pixelBlocks[i].addEventListener("mouseover", mouseDrag);
+  };
+
+//Function to add mouseStatus for drag
+var mouseStatus = "";
+
+function mouseDown () {
+  mouseStatus = "down";
+};
+
+function mouseUp () {
+    mouseStatus = "up";
+};
+
+//Function to add color while dragging
+function mouseDrag() {
+    if(mouseStatus === "down"){
+        this.style.backgroundColor = savedColor;
+    } else {
+        mouseStatus = "up";
+    }
+}
 
 //Function to add color to our pixel blocks
 function addColor() {
