@@ -1,0 +1,69 @@
+
+#container{
+    height: 25%;
+    width: 25%;
+    display:flex;
+    flex-direction: row;
+}
+
+#pixelContainer{
+    height: 350px;
+    width: 350px;
+    display:flex;
+}
+
+#sideContainer{
+    display: flex;
+    flex-direction: column;
+}
+
+#colorContainer{
+    width: 225px;
+    height: 200px;
+    display: flex;
+    flex-direction: row;
+}
+
+#buttonContainer{
+    width: 200px;
+    height: 10px;
+}
+
+/* .colorRows{
+    display:flex;
+    flex-direction: row;
+    height: 100px;
+} */
+
+.colorBlocks{
+    width: 20px;
+    height: 20px;
+    border: 1px black;
+    display:flex;
+}
+
+.pixelBlocks{
+    width: 40px;
+    height: 40px;
+    border: 1px black;
+    border-style: solid;
+    display:flex;
+}
+
+#eraser {
+    display: flex;
+    width: 40%;
+    border: 1px black;
+    border-style: solid;
+    justify-content: center;
+    align-content: space-around;
+}
+
+#clearer {
+    display: flex;
+    width: 40%;
+    border: 1px black;
+    border-style: solid;
+    justify-content: center;
+    align-content: space-around;
+}
