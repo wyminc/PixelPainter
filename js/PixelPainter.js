@@ -75,7 +75,11 @@ for(var i = 0; i < colorBlocks.length; i++) {
             document.getElementById("color" + (i+1)).style.backgroundColor = rgbColor;
             }
         }
-    }   
+    }
+
+//Adding an variable to affect pixelblocks columns and rows
+var numberRows = 10;
+var numberColumns = 5;
 
 //Creating a container for the pixel div section
 var pixelContainer = document.createElement("div");
@@ -83,7 +87,7 @@ pixelContainer.id = "pixelContainer"
 container.appendChild(pixelContainer);
 
 //Creating pixelRows at any amount that is set in the condition
-for(var i = 0; i < 10; i++) {
+for(var i = 0; i < numberColumns; i++) {
     let createPixelRows = document.createElement("div"); //Creating a row
     createPixelRows.id = "row" + (i+1);
     createPixelRows.className = "pixelRows"
@@ -99,7 +103,7 @@ var p = 0
 
 //For loop that will create the empty div(square)
 for(var i = 0; i < pixelRows.length; i++) {
-    for(var j = 0; j < 10; j++) {
+    for(var j = 0; j < numberRows; j++) {
         p++;
         let createPixel = document.createElement("div");
         createPixel.id = "pixel" + (p); 
@@ -175,7 +179,6 @@ sideContainer.appendChild(buttonContainer);
 var eraser = document.createElement("button");
 eraser.id = "eraser";
 eraser.innerHTML = "Eraser";
-// eraser.src = "https://www.flaticon.com/free-icon/erase-text_77705";
 buttonContainer.appendChild(eraser);
 
 //Adding event listener to eraser
@@ -202,6 +205,278 @@ function clear() {
     for(var i = 0; i < pixelBlocks.length; i++) {
         document.getElementById("pixel" + (i+1)).style.backgroundColor = "rgb(255, 255, 255)";
     }
+};
+
+//Creating save button
+var save = document.createElement("button");
+save.id = "save";
+save.innerHTML = "Save";
+buttonContainer.appendChild(save);
+
+//Adding event listener to save
+var getSave = document.getElementById("save");
+
+getSave.addEventListener("click", saveMe);
+
+//Save Function
+var saveObj = {};
+
+function saveMe () {
+    saveObj = {};
+
+    for (var i = 0; i < pixelBlocks.length; i++) {
+        saveObj[i] = document.getElementById("pixel" + (i+1)).style.backgroundColor;
+    }
+}
+
+//Creating load button
+var load = document.createElement("button");
+load.id = "load";
+load.innerHTML = "Load";
+buttonContainer.appendChild(load);
+
+//Adding event listener to load
+var getLoad = document.getElementById("load");
+getLoad.addEventListener("click", loadMe);
+
+//Load Function
+
+function loadMe () {
+    for (var i = 0; i < pixelBlocks.length; i++) {
+        document.getElementById("pixel" + (i+1)).style.backgroundColor = saveObj[i];
+    }
+}
+
+//Creating an input to change columns and rows of pixelblocks
+var columnInput = document.createElement("input");
+columnInput.id = "columnInput";
+columnInput.innerHTML = "";
+buttonContainer.appendChild(columnInput);
+
+var rowInput = document.createElement("input");
+rowInput.id = "rowInput";
+rowInput.innerHTML = "";
+buttonContainer.appendChild(rowInput);
+
+//Adding event listener to input boxes
+var getColumnInput = document.getElementById("columnInput");
+getColumnInput.addEventListener("blur", changeColumn);
+
+var getRowInput = document.getElementById("rowInput");
+getRowInput.addEventListener("blur", changeRow);
+
+//Change Column/Row 
+
+function changeColumn() {
+    saveMe();
+
+    numberColumns = getColumnInput.value;
+
+    var myNode = document.getElementById("pixelContainer");
+    while (myNode.firstChild) {
+        myNode.removeChild(myNode.firstChild);
+    }
+
+    for(var i = 0; i < numberColumns; i++) {
+        let createPixelRows = document.createElement("div"); //Creating a row
+        createPixelRows.id = "row" + (i+1);
+        createPixelRows.className = "pixelRows"
+        pixelContainer.appendChild(createPixelRows);
+    }
+    
+    var a = 0;
+
+    for(var i = 0; i < pixelRows.length; i++) {
+        for(var j = 0; j < numberRows; j++) {
+            a++;
+            let createPixel = document.createElement("div");
+            createPixel.id = "pixel" + (a); 
+            createPixel.className = "pixelBlocks";
+            pixelRows[i].appendChild(createPixel);
+        };
+    }; 
+
+    //Get pixelBlocks element
+    var pixelBlocks = document.getElementsByClassName("pixelBlocks");
+
+    //Variable to store the color to paint with (default white)
+    var savedColor = "rgb(255, 255, 255)";
+
+    //Adding eventlistener to color blocks
+    for(var i = 0; i<colorBlocks.length; i++){
+        colorBlocks[i].addEventListener("click", grabColor);
+    };
+
+    //Function to save color to our color variable
+    function grabColor() {
+        savedColor = this.style.backgroundColor;
+    };
+
+    //Adding eventlisteners to pixel blocks
+    for(var i = 0; i<pixelBlocks.length; i++){
+        pixelBlocks[i].addEventListener("mousedown", addColor);
+    };
+
+    for(var i = 0; i<pixelBlocks.length; i++){
+        pixelBlocks[i].addEventListener("mousedown", mouseDown);
+    };
+
+    for(var i = 0; i<pixelBlocks.length; i++){
+        pixelBlocks[i].addEventListener("mouseup", mouseUp);
+    };
+
+    for(var i = 0; i<pixelBlocks.length; i++){
+        pixelBlocks[i].addEventListener("mouseover", mouseDrag);
+    };
+
+    //Function to add mouseStatus for drag
+    var mouseStatus = "";
+
+    function mouseDown () {
+    mouseStatus = "down";
+    };
+
+    function mouseUp () {
+        mouseStatus = "up";
+    };
+
+    //Function to add color while dragging
+    function mouseDrag() {
+        if(mouseStatus === "down"){
+            this.style.backgroundColor = savedColor;
+        } else {
+            mouseStatus = "up";
+        }
+    };
+
+    //Function to add color to our pixel blocks
+    function addColor() {
+        this.style.backgroundColor = savedColor;
+    };
+
+    loadMe();
+}
+
+var newAmount = 0;
+var oldAmount = 0;
+var compareArray = [];
+
+function changeRow() {
+    compareArray = [];
+    oldAmount = (document.getElementsByClassName("pixelBlocks").length / pixelRows.length);
+    newAmount = Number(getRowInput.value);
+
+    for (var i = 0; i < document.getElementsByClassName("pixelBlocks").length; i++) {
+        compareArray.push(document.getElementById("pixel" + (i+1)).parentNode.id);
+    }
+
+    saveMe();
+
+    if ((!getRowInput.value) || (getRowInput.value == "undefined")) {
+        numberRows = 10;
+    } else {
+        numberRows = getRowInput.value;
+    }
+    
+    var myNode = document.getElementById("pixelContainer");
+    while (myNode.firstChild) {
+        myNode.removeChild(myNode.firstChild);
+    }
+
+    for(var i = 0; i < numberColumns; i++) {
+        let createPixelRows = document.createElement("div"); //Creating a row
+        createPixelRows.id = "row" + (i+1);
+        createPixelRows.className = "pixelRows"
+        pixelContainer.appendChild(createPixelRows);
+    };
+
+    var b = 0;
+
+    for(var i = 0; i < pixelRows.length; i++) {
+        for(var j = 0; j < numberRows; j++) {
+            b++;
+            let createPixel = document.createElement("div");
+            createPixel.id = "pixel" + (b); 
+            createPixel.className = "pixelBlocks";
+            pixelRows[i].appendChild(createPixel);
+        };
+    }; 
+
+    //Get pixelBlocks element
+    var pixelBlocks = document.getElementsByClassName("pixelBlocks");
+
+    //Variable to store the color to paint with (default white)
+    var savedColor = "rgb(255, 255, 255)";
+
+    //Adding eventlistener to color blocks
+    for(var i = 0; i<colorBlocks.length; i++){
+        colorBlocks[i].addEventListener("click", grabColor);
+    };
+
+    //Function to save color to our color variable
+    function grabColor() {
+        savedColor = this.style.backgroundColor;
+    };
+
+    //Adding eventlisteners to pixel blocks
+    for(var i = 0; i<pixelBlocks.length; i++){
+        pixelBlocks[i].addEventListener("mousedown", addColor);
+    };
+
+    for(var i = 0; i<pixelBlocks.length; i++){
+        pixelBlocks[i].addEventListener("mousedown", mouseDown);
+    };
+
+    for(var i = 0; i<pixelBlocks.length; i++){
+        pixelBlocks[i].addEventListener("mouseup", mouseUp);
+    };
+
+    for(var i = 0; i<pixelBlocks.length; i++){
+        pixelBlocks[i].addEventListener("mouseover", mouseDrag);
+    };
+
+    //Function to add mouseStatus for drag
+    var mouseStatus = "";
+
+    function mouseDown () {
+    mouseStatus = "down";
+    };
+
+    function mouseUp () {
+        mouseStatus = "up";
+    };
+
+    //Function to add color while dragging
+    function mouseDrag() {
+        if(mouseStatus === "down"){
+            this.style.backgroundColor = savedColor;
+        } else {
+            mouseStatus = "up";
+        }
+    };
+
+    //Function to add color to our pixel blocks
+    function addColor() {
+        this.style.backgroundColor = savedColor;
+    };
+
+    for (var i = 0; i < pixelBlocks.length; i++) {
+        if(i > (numberRows-1) && (oldAmount < newAmount) ) {
+            document.getElementById("pixel" + (i + 1) ).style.backgroundColor = saveObj[(i) + (((Number(document.getElementById("pixel" + (i + 1)).parentNode.id.split(/([0-9]+)/)[1])) - 1) * (numberRows - oldAmount))];
+        } else {
+            document.getElementById("pixel" + (i+1)).style.backgroundColor = saveObj[i];
+        } 
+    }
+    
+    for (var i = 0; i < pixelBlocks.length; i++)
+        if (i > (numberRows-1) && (oldAmount > newAmount) && (document.getElementById("pixel" + (i+1)).parentNode.id !== compareArray[i])) {
+            // document.getElementById("pixel" + (i+1)).style.backgroundColor = "rgb(255, 255, 255)";
+            document.getElementById("pixel" + (i + 1) ).style.backgroundColor = saveObj[(i) + (((Number(document.getElementById("pixel" + (i + 1)).parentNode.id.split(/([0-9]+)/)[1])) - 1) * (oldAmount - numberRows))];
+        } else if (i > (numberRows-1)) {
+            document.getElementById("pixel" + (i + 1) ).style.backgroundColor = saveObj[(i) + (((Number(document.getElementById("pixel" + (i + 1)).parentNode.id.split(/([0-9]+)/)[1])) - 1) * (oldAmount - numberRows))];
+        } else{
+            document.getElementById("pixel" + (i+1)).style.backgroundColor = saveObj[i];
+        }
 };
 
 

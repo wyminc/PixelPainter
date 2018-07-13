@@ -1,7 +1,6 @@
 
 #container{
-    height: 25%;
-    width: 25%;
+    width: 100%;
     display:flex;
     flex-direction: row;
 }
@@ -18,10 +17,10 @@
 }
 
 #colorContainer{
-    width: 225px;
-    height: 200px;
+    width: 50%;
+    height: 45%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 }
 
 #buttonContainer{
@@ -29,11 +28,10 @@
     height: 10px;
 }
 
-/* .colorRows{
+.colorRows{
     display:flex;
     flex-direction: row;
-    height: 100px;
-} */
+}
 
 .colorBlocks{
     width: 20px;
