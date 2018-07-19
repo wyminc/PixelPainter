@@ -247,6 +247,9 @@ function loadMe () {
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//INPUT STUFF//
+
 //Creating an input to change columns and rows of pixelblocks
 var columnInput = document.createElement("input");
 columnInput.id = "columnInput";
